@@ -6,7 +6,7 @@ const app = express()
 
 app.use(
   cors({
-    origin: "https://ranksetgo-app.netlify.app/", // Netlify frontend
+    origin: "https://ranksetgo-app.netlify.app", // Netlify frontend
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
