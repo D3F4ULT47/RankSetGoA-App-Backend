@@ -65,7 +65,8 @@ const registerUser = asyncHandler(async (req, res) => {
   )
   const options ={ // After this it can't be changed from frontEnd only from server
     httpOnly :true,
-    secure:true
+    secure:true,
+    sameSite: "none",
   }
 
   return res
@@ -103,7 +104,8 @@ const signInUser = asyncHandler(async(req,res)=>{
   select("-password -refreshToken")
   const options ={ // After this it can't be changed from frontEnd only from server
     httpOnly :true,
-    secure:true
+    secure:true,
+    sameSite: "none",
   }
   return res
   .status(200)
@@ -135,7 +137,8 @@ const logOutUser = asyncHandler(async(req,res)=>{
   )
   const options ={ // After this it can't be changed from frontEnd only from server
     httpOnly :true,
-    secure:true
+    secure:true,
+    sameSite: "none",
   }
   return res
   .status(200)
@@ -161,7 +164,8 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
   const {accessToken,refreshToken:newRefreshToken}= await generateAccessAndRefreshTokens(requestingUser._id)
    const options ={ 
      httpOnly :true,
-     secure:true
+     secure:true,
+     sameSite: "none",
    }
    return res
    .status(200)
