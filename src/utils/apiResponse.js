@@ -10,7 +10,6 @@ class apiResponse{
     // redirection message (300-399)
     // client error responses (400-499)
     // Server error responses (500-599)
-    console.log("SuccessFully registered the User\n",this.data)
   }
 
 }
