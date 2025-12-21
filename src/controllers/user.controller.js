@@ -88,6 +88,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const signInUser = asyncHandler(async(req,res)=>{
   const{email,password}=req.body
+  console.log("yep this controller is running though")
   if(!(email && password)){
     throw new apiError(400,"Email and password are required")
    }
@@ -99,11 +100,11 @@ const signInUser = asyncHandler(async(req,res)=>{
   if(!validUser){
     throw new apiError(401,"Invalid User Credentials")
   }   
-  const {accessToken,refreshToken}=await generateAccessAndRefreshTokens(existingUser._id)
+  const {accessToken,refreshToken}= await generateAccessAndRefreshTokens(existingUser._id)
   const loggedInUser= await userModel.findById(existingUser._id).
   select("-password -refreshToken")
   const options ={ // After this it can't be changed from frontEnd only from server
-    httpOnly :true,
+    httpOnly :true, // prevents user from reading the cookie from frontend
     secure:true,
     sameSite: "none",
   }
