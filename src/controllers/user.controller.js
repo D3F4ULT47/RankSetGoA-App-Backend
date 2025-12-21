@@ -230,22 +230,20 @@ const getCurrentUser = asyncHandler(async(req,res)=>{
 })
 
 const updateAccountDetail = asyncHandler(async(req,res)=>{
- const {fullName,email,username} =req.body
- if(!(fullName || email || username)){
+ const {username} =req.body
+ if(!username){
   throw new apiError(400,"At least one field is required")
  }
  const updateFields = {}
- if(fullName) updateFields.fullName = fullName
- if(email) updateFields.email = email
  if(username) {
    // Check if username is already taken by another user
    const existingUser = await userModel.findOne({ 
-     username: username.toLowerCase().trim(),
-     _id: { $ne: req.user._id }
+   username: username.toLowerCase().trim(),
+   _id: { $ne: req.user._id }
    })
-   if(existingUser){
-     throw new apiError(400,"Username already taken")
-   }
+  if(existingUser){
+    throw new apiError(400,"Username already taken")
+  }
    updateFields.username = username.toLowerCase().trim()
  }
  
