@@ -236,7 +236,7 @@ const updateAccountDetail = asyncHandler(async(req,res)=>{
   throw new apiError(400,"At least one field is required")
  }
  const updateFields = {}
- if(username) {
+ /* if(username) {
    // Check if username is already taken by another user
    const existingUser = await userModel.findOne({ 
    username: username.toLowerCase().trim(),
@@ -246,7 +246,7 @@ const updateAccountDetail = asyncHandler(async(req,res)=>{
     throw new apiError(400,"Username already taken")
   }
    updateFields.username = username.toLowerCase().trim()
- }
+ } */
  
  const user = await userModel.findByIdAndUpdate(
    req.user?._id,
