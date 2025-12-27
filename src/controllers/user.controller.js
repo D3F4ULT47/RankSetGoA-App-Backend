@@ -23,25 +23,34 @@ const generateAccessAndRefreshTokens = async(Id)=>{
 }
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, fullName, password } = req.body;
+  const { email, fullName, password,username } = req.body;
 
-  if ([email, fullName, password].some(field => !field || field.trim() === "")) {
+  if ([email, fullName, password,username].some(field => !field || field.trim() === "")) {
     throw new apiError(400, "All fields are required");
   }
 
   const existingUser = await userModel.findOne({
-    $or: [{ email }, { fullName }],
+    $or: [{ email}, { fullName }],
   });
 
   if (existingUser) {
     throw new apiError(400, "there exists an user with the provided credentials");
   }
-  
+
+const normalizedUsername = username.toLowerCase().trim();
+const existingUsernameUser = await userModel.findOne({
+  username: normalizedUsername
+});
+
+if (existingUsernameUser) {
+  throw new apiError(400, "Username already taken");
+}
 
   const newUser = await userModel.create({
     email,
     fullName,
     password,
+    username: username.toLowerCase().trim()  
   });
 
   const createdUser = await userModel
@@ -86,9 +95,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 
+
+
+
 const signInUser = asyncHandler(async(req,res)=>{
   const{email,password}=req.body
-  console.log("yep this controller is running though")
   if(!(email && password)){
     throw new apiError(400,"Email and password are required")
    }
@@ -125,6 +136,7 @@ const signInUser = asyncHandler(async(req,res)=>{
 })
  
 const logOutUser = asyncHandler(async(req,res)=>{
+console.log("yep this controller is running though")
  await userModel.findByIdAndUpdate(
    req.user._id,
     {
@@ -236,17 +248,19 @@ const updateAccountDetail = asyncHandler(async(req,res)=>{
   throw new apiError(400,"At least one field is required")
  }
  const updateFields = {}
- /* if(username) {
-   // Check if username is already taken by another user
-   const existingUser = await userModel.findOne({ 
-   username: username.toLowerCase().trim(),
-   _id: { $ne: req.user._id }
-   })
-  if(existingUser){
-    throw new apiError(400,"Username already taken")
+  if(username) {
+   // check if username is already taken by another user
+   const normalizedUsername = username.toLowerCase().trim();
+   const existingUsernameUser = await userModel.findOne({
+   username: normalizedUsername
+  });
+
+      if (existingUsernameUser) {
+        throw new apiError(400, "Username already taken");
+      }
   }
    updateFields.username = username.toLowerCase().trim()
- } */
+ 
  
  const user = await userModel.findByIdAndUpdate(
    req.user?._id,
