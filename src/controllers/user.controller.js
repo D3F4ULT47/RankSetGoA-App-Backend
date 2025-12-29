@@ -60,8 +60,8 @@ if (existingUsernameUser) {
   if (!createdUser) {
     throw new apiError(500, "User creation failed");
   }
-  const {accessToken,refreshToken}=await generateAccessAndRefreshTokens(createdUser._id)
-  await userModel.findByIdAndUpdate(
+  // const {accessToken,refreshToken}=await generateAccessAndRefreshTokens(createdUser._id)
+  /* await userModel.findByIdAndUpdate(
     createdUser._id,
     {
     $set:{
@@ -76,12 +76,12 @@ if (existingUsernameUser) {
     httpOnly :true,
     secure:true,
     sameSite: "none",
-  }
+  }*/
 
   return res
   .status(200)
-  .cookie("accessToken",accessToken,options)
-  .cookie("refreshToken",refreshToken,options)
+  //.cookie("accessToken",accessToken,options)
+  //.cookie("refreshToken",refreshToken,options)
   .json(
     new apiResponse(
       200,
